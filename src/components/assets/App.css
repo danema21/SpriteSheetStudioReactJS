@@ -1,0 +1,43 @@
+.App {
+  background-image: linear-gradient(to right, violet 0%, skyblue 100%);
+  text-align: center;
+  height: 600px;
+}
+
+.topBar{
+  background-color: black;
+  text-align: left;
+}
+
+#topBarButtonGroup{
+  width: 100%;
+}
+
+#framesBar{
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* scrollbar styles */
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/***********************************/
