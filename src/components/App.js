@@ -26,6 +26,13 @@ function TopBar() {
           <Button variant='dark'>1</Button>
         </ButtonGroup>
       </div>
+
+      <div id="undoRedo">
+        <ButtonGroup>
+          <Button variant='secondary'>undo</Button>
+          <Button variant='secondary'>redo</Button>
+        </ButtonGroup>
+      </div>
     </div>
   );  
 }
@@ -35,6 +42,7 @@ function App() {
   return (
     <div className="App">
       <TopBar />
+      <canvas id="canvas" width="320" height="320" />
     </div>
   );
 }
