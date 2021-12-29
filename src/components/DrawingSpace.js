@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './assets/DrawingSpace.css';
+import ToolBar from './ToolBar';
+import TopBar from './TopBar';
 
 
 function DrawingSpace(){
@@ -46,6 +48,7 @@ function DrawingSpace(){
     }, []);
     
 
+    //funciones de dibujado en canvas
     const startDrawing = (e) => {
         canvasCtxRef.current.beginPath();
         canvasCtxRef.current.moveTo(
@@ -74,6 +77,8 @@ function DrawingSpace(){
 
     return (
         <div className="drawingSpace">
+            <TopBar />
+
             <canvas id="mainCanvas"
             ref={canvasRef}
             width={`320px`} 
@@ -88,6 +93,11 @@ function DrawingSpace(){
             onMouseUp={endDrawing}
             onMouseOut={endDrawing}
             onMouseMove={draw}
+            />
+
+            <ToolBar 
+            setLineColor={setLineColor}
+            setLineWidth={setLineWidth}
             />
         </div>
     );

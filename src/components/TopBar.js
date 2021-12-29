@@ -7,7 +7,7 @@ import './assets/TopBar.css';
 function TopBar() {
 
     return (
-        <div className="topBar">
+        <div className="topBar fixed-top">
             <ButtonGroup id="topBarButtonGroup" vertical>
                 <ButtonGroup size="lg">
                 <Button variant="secondary">Remove Frame</Button>
