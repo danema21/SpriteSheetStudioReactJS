@@ -1,0 +1,14 @@
+.drawingSpace{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 30px;
+}
+
+.drawingSpace canvas{
+    width: 320px;
+    height: 320px;
+    position: absolute;
+    display: block;
+    background-color: white;
+}

@@ -22,14 +22,11 @@
 
 /***********************************/
 
-.App {
+body{
   background-image: linear-gradient(to right, violet 0%, skyblue 100%);
-  text-align: center;
-  height: 600px;
 }
 
-
-
-#canvas{
-  background-color: white;
+.App {
+  text-align: center;
+  height: 100%;
 }

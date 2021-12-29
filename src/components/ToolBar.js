@@ -5,7 +5,7 @@ function ToolBar(){
     
 
     return (
-        <div>
+        <div className="toolBar">
 
         </div>
     );
