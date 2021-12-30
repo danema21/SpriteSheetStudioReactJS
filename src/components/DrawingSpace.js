@@ -12,7 +12,8 @@ function DrawingSpace(){
     const gridCtxRef = useRef(null);
     const [isDrawing, setIsDrawing] = useState(false);
     const [lineWidth, setLineWidth] = useState(5);
-    const [lineColor, setLineColor] = useState("black");
+    const [lineColor, setLineColor] = useState("#000000");
+    const [tool, setTool] = useState("brush");
 
     //inicializacion cuando el componente se monta por primera vez
     useEffect(() => {
@@ -67,25 +68,36 @@ function DrawingSpace(){
         if(!isDrawing){
             return;
         }
-        canvasCtxRef.current.lineTo(
-            e.nativeEvent.offsetX,
-            e.nativeEvent.offsetY
-        );
 
-        canvasCtxRef.current.stroke();
-    }
-
-    const drawTouch = (e) => {
-        if(!isDrawing){
-            return;
+        switch(tool){
+            case "brush":
+                if(e.touches == null){
+                    canvasCtxRef.current.lineTo(
+                        e.nativeEvent.offsetX,
+                        e.nativeEvent.offsetY
+                    );
+                }else{
+                    canvasCtxRef.current.lineTo(
+                        e.touches[0].clientX-canvasRef.current.offsetLeft,
+                        e.touches[0].clientY-canvasRef.current.offsetTop
+                    );
+                }
+                canvasCtxRef.current.stroke();
+                break;
+            case "pencil":
+                    canvasCtxRef.current.fillStyle = lineColor;
+                    if(e.touches == null){
+                        canvasCtxRef.current.fillRect(Math.floor(e.nativeEvent.offsetX / 20) * 20, Math.floor(e.nativeEvent.offsetY / 20) * 20, 20, 20);
+                    }else{
+                        var x = e.touches[0].clientX - canvasRef.current.offsetLeft;
+                        var y = e.touches[0].clientY - canvasRef.current.offsetTop;
+                        canvasCtxRef.current.fillRect(Math.floor(x / 20) * 20, Math.floor(y / 20) * 20, 20, 20);
+                    }
+                    break;
+            default:
+                break;
         }
-
-        canvasCtxRef.current.lineTo(
-            e.touches[0].clientX-canvasRef.current.offsetLeft,
-            e.touches[0].clientY-canvasRef.current.offsetTop
-        );
-
-        canvasCtxRef.current.stroke();
+        
     }
 
     return (
@@ -107,12 +119,13 @@ function DrawingSpace(){
             onMouseUp={endDrawing}
             onMouseOut={endDrawing}
             onMouseMove={draw}
-            onTouchMove={drawTouch}
+            onTouchMove={draw}
             />
 
             <ToolBar 
             setLineColor={setLineColor}
             setLineWidth={setLineWidth}
+            setTool={setTool}
             />
         </div>
     );

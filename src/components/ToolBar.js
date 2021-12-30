@@ -4,21 +4,21 @@ import './assets/ToolBar.css';
 import Dropdown from 'react-bootstrap/Dropdown';
 
 
-function ToolBar({setLineColor, setLineWidth}){
+function ToolBar({setLineColor, setLineWidth, setTool}){
     
 
     return (
         <div className="toolBar fixed-bottom bg-secondary">
-            <Dropdown drop='up' autoClose='outside'>
+            <Dropdown drop='up'>
                 <Dropdown.Toggle variant='secondary'>
                     Tools
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
-                    <Dropdown.Item>pencil</Dropdown.Item>
-                    <Dropdown.Item>brush</Dropdown.Item>
-                    <Dropdown.Item>eraser</Dropdown.Item>
-                    <Dropdown.Item>filler</Dropdown.Item>
+                    <Dropdown.Item onClick={() => setTool("pencil")}>pencil</Dropdown.Item>
+                    <Dropdown.Item onClick={() => setTool("brush")}>brush</Dropdown.Item>
+                    <Dropdown.Item onClick={() => setTool("eraser")}>eraser</Dropdown.Item>
+                    <Dropdown.Item onClick={() => setTool("filler")}>filler</Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
             <input type="color" 
