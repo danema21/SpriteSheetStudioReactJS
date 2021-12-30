@@ -89,16 +89,29 @@ function DrawingSpace(){
                     if(e.touches == null){
                         canvasCtxRef.current.fillRect(Math.floor(e.nativeEvent.offsetX / 20) * 20, Math.floor(e.nativeEvent.offsetY / 20) * 20, 20, 20);
                     }else{
-                        var x = e.touches[0].clientX - canvasRef.current.offsetLeft;
-                        var y = e.touches[0].clientY - canvasRef.current.offsetTop;
+                        let x = e.touches[0].clientX - canvasRef.current.offsetLeft;
+                        let y = e.touches[0].clientY - canvasRef.current.offsetTop;
                         canvasCtxRef.current.fillRect(Math.floor(x / 20) * 20, Math.floor(y / 20) * 20, 20, 20);
                     }
+                    break;
+            case "eraser":
+                    canvasCtxRef.current.fillStyle = "rgba(255, 255, 255, 255)";
+                    if(e.touches == null){
+                        canvasCtxRef.current.fillRect(e.nativeEvent.offsetX - (lineWidth/2), e.nativeEvent.offsetY - (lineWidth/2), lineWidth, lineWidth);
+                    }else{
+                        let x = e.touches[0].clientX - canvasRef.current.offsetLeft;
+                        let y = e.touches[0].clientY - canvasRef.current.offsetTop;
+                        canvasCtxRef.current.fillRect(Math.floor(x / 20) * 20, Math.floor(y / 20) * 20, 20, 20);
+                    }
+                    break;
+            case "filler":
+                    //falta implementar
                     break;
             default:
                 break;
         }
         
-    }
+    };
 
     return (
         <div className="drawingSpace">
