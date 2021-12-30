@@ -1,10 +1,7 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Button from 'react-bootstrap/Button';
-
 import './assets/ToolBar.css';
 import Dropdown from 'react-bootstrap/Dropdown';
-import { ButtonGroup } from 'react-bootstrap';
 
 
 function ToolBar({setLineColor, setLineWidth}){

@@ -75,6 +75,19 @@ function DrawingSpace(){
         canvasCtxRef.current.stroke();
     }
 
+    const drawTouch = (e) => {
+        if(!isDrawing){
+            return;
+        }
+
+        canvasCtxRef.current.lineTo(
+            e.touches[0].clientX-canvasRef.current.offsetLeft,
+            e.touches[0].clientY-canvasRef.current.offsetTop
+        );
+
+        canvasCtxRef.current.stroke();
+    }
+
     return (
         <div className="drawingSpace">
             <TopBar />
@@ -90,9 +103,11 @@ function DrawingSpace(){
             width={`320px`}
             height={`320px`}
             onMouseDown={startDrawing}
+            onTouchStart={startDrawing}
             onMouseUp={endDrawing}
             onMouseOut={endDrawing}
             onMouseMove={draw}
+            onTouchMove={drawTouch}
             />
 
             <ToolBar 
