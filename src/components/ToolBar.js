@@ -4,7 +4,7 @@ import './assets/ToolBar.css';
 import Dropdown from 'react-bootstrap/Dropdown';
 
 
-function ToolBar({setLineColor, setLineWidth, setTool}){
+function ToolBar({setLineColor, setLineWidth, setTool, setGridOn}){
     
 
     return (
@@ -44,14 +44,22 @@ function ToolBar({setLineColor, setLineWidth, setTool}){
                     </Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
-            <Dropdown drop='up' autoClose='outside'>
+            <Dropdown drop='up'>
                 <Dropdown.Toggle variant='secondary'>
-                    Layout
+                    Grid
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
-                    <Dropdown.Item>
-                        Grid On
+                    <Dropdown.Item onClick={() => {
+                        setGridOn(true);
+                    }}>
+                            Turn On
+                    </Dropdown.Item>
+
+                    <Dropdown.Item onClick={() => {
+                        setGridOn(false);
+                    }}>
+                            Turn Off
                     </Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>

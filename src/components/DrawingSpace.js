@@ -14,6 +14,7 @@ function DrawingSpace(){
     const [lineWidth, setLineWidth] = useState(5);
     const [lineColor, setLineColor] = useState("black");
     const [tool, setTool] = useState("brush");
+    const [gridOn, setGridOn] = useState(true);
 
     //inicializacion cuando el componente se monta por primera vez
     useEffect(() => {
@@ -27,12 +28,18 @@ function DrawingSpace(){
     }, [lineWidth, lineColor]);
 
     useEffect(() => {
+        if(!gridOn){
+            gridRef.current.style.opacity = "0";
+        }else{
+            gridRef.current.style.opacity = "1";
+        }
+
         const grid = gridRef.current;
 
         const ctx = grid.getContext("2d");
         ctx.beginPath();
         ctx.strokeStyle = "black";
-        ctx.lineWidth = 1;
+        ctx.lineWidth = 0.5;
         for(var x = 0; x <= canvasRef.current.width; x += 20){
 			ctx.moveTo(x, 0);
 			ctx.lineTo(x, canvasRef.current.width);
@@ -46,7 +53,8 @@ function DrawingSpace(){
         ctx.closePath();
 
         gridCtxRef.current = ctx;
-    }, []);
+
+    }, [gridOn]);
     
 
     //funciones de dibujado en canvas
@@ -214,6 +222,7 @@ function DrawingSpace(){
             setLineColor={setLineColor}
             setLineWidth={setLineWidth}
             setTool={setTool}
+            setGridOn={setGridOn}
             />
         </div>
     );
