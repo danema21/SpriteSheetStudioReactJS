@@ -1,1 +1,2 @@
-# SpriteSheetStudio made with ReactJS
+# SpriteSheetStudio hecho con ReactJS
+Ahora esta aplicación contará con un diseño responsive, tendra soporte para dispositivos táctiles y se disminuirá su complejidad al estar mejor organizado su código.

@@ -12,7 +12,7 @@ function DrawingSpace(){
     const gridCtxRef = useRef(null);
     const [isDrawing, setIsDrawing] = useState(false);
     const [lineWidth, setLineWidth] = useState(5);
-    const [lineColor, setLineColor] = useState("#000000");
+    const [lineColor, setLineColor] = useState("black");
     const [tool, setTool] = useState("brush");
 
     //inicializacion cuando el componente se monta por primera vez
@@ -101,12 +101,87 @@ function DrawingSpace(){
                     }else{
                         let x = e.touches[0].clientX - canvasRef.current.offsetLeft;
                         let y = e.touches[0].clientY - canvasRef.current.offsetTop;
-                        canvasCtxRef.current.fillRect(Math.floor(x / 20) * 20, Math.floor(y / 20) * 20, 20, 20);
+                        canvasCtxRef.current.fillRect(x - (lineWidth/ 2), y - (lineWidth/ 2), 20, 20);
                     }
                     break;
             case "filler":
-                    //falta implementar
+                    /* falta implementar (complejidad muy alta)
+                    let pixelData = canvasCtxRef.current.getImageData(e.nativeEvent.offsetX, e.nativeEvent.offsetY, 1, 1).data;
+                    let currentFillColor = lineColor.slice(5, lineColor.length-1);
+                    let fillColorR = currentFillColor.split(',')[0];
+                    let fillColorG = currentFillColor.split(',')[1];
+                    let fillColorB = currentFillColor.split(',')[2];
+                    
+                    let startR = pixelData[0];
+                    let startG = pixelData[1];
+                    let startB = pixelData[2];
+
+                    let newPos, x, y, pixelPos;
+                    let colorLayer = canvasCtxRef.current.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);
+
+                    let pixelStack = [[e.nativeEvent.offsetX, e.nativeEvent.offsetY]];
+
+                    const matchStartColor = (pixelPos) => {
+                        let r = colorLayer.data[pixelPos];
+                        let g = colorLayer.data[pixelPos + 1];
+                        let b = colorLayer.data[pixelPos + 2];
+
+                        return (r === startR && g === startG && b === startB);
+                    }
+
+                    const colorPixel = (pixelPos) => {
+                        colorLayer.data[pixelPos] = fillColorR;
+                        colorLayer.data[pixelPos + 1] = fillColorG;
+                        colorLayer.data[pixelPos + 2] = fillColorB;
+                        colorLayer.data[pixelPos + 3] = 255;
+                    }
+                    let i = 0;
+                    while(i < 1000){
+                        i++;
+                        newPos = pixelStack.pop();
+                        x = newPos[0];
+                        y = newPos[1];
+
+                        pixelPos = (y * canvasRef.current.width + x) * 4;
+                        while(y-- >= 0 && matchStartColor(pixelPos)){
+                            pixelPos -= canvasRef.current.width * 4;
+                        }
+
+                        pixelPos += canvasRef.current.width * 4;
+                        ++y;
+                        let reachLeft = false;
+                        let reachRight = false;
+                        while(y++ < canvasRef.current.height - 1 && matchStartColor(pixelPos)){
+                            colorPixel(pixelPos);
+                            
+                            if(x > 0){
+                                if(matchStartColor(pixelPos - 4)){
+                                    if(!reachLeft){
+                                        pixelStack.push([x-1, y]);
+                                        reachLeft = true;
+                                    }else if(reachLeft){
+                                        reachLeft = false;
+                                    }
+                                }
+                            }
+
+                            if(x < canvasRef.current.width -1){
+                                if(matchStartColor(pixelPos + 4)){
+                                    if(!reachRight){
+                                        pixelStack.push([x+1, y]);
+                                        reachRight = true;
+                                    }else if(reachRight){
+                                        reachRight = false;
+                                    }
+                                }
+                            }
+
+                            pixelPos += canvasRef.current.width * 4;
+                        }
+                    }
+                    canvasCtxRef.current.putImageData(colorLayer, 0, 0);*/
                     break;
+                    
             default:
                 break;
         }

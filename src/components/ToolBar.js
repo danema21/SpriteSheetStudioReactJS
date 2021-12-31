@@ -21,8 +21,7 @@ function ToolBar({setLineColor, setLineWidth, setTool}){
                     <Dropdown.Item onClick={() => setTool("filler")}>filler</Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
-            <input type="color" 
-            value="#000000"
+            <input type="color"
             onChange={(e) => {
                 setLineColor(e.target.value);
             }}
