@@ -15,17 +15,22 @@ function DrawingSpace(){
     const [lineColor, setLineColor] = useState("black");
     const [tool, setTool] = useState("brush");
     const [gridOn, setGridOn] = useState(true);
+    const [frameCount, setFrameCount] = useState(1);
+    const [rowCount, setRowCount] = useState(1);
 
     //inicializacion cuando el componente se monta por primera vez
     useEffect(() => {
         const canvas = canvasRef.current;
+        canvas.width = frameCount * 320; //320 tamanio default
+        canvas.height = rowCount * 320; //320 tamanio default
+
         const ctx = canvas.getContext("2d");
         ctx.lineCap = "round";
         ctx.lineJoin = "round";
         ctx.strokeStyle = lineColor;
         ctx.lineWidth = lineWidth;
         canvasCtxRef.current = ctx;
-    }, [lineWidth, lineColor]);
+    }, [lineWidth, lineColor, frameCount, rowCount]);
 
     useEffect(() => {
         if(!gridOn){
@@ -35,26 +40,28 @@ function DrawingSpace(){
         }
 
         const grid = gridRef.current;
+        grid.width = frameCount * 320; //320 tamanio default
+        grid.height = rowCount * 320; //320 tamanio default
 
         const ctx = grid.getContext("2d");
         ctx.beginPath();
         ctx.strokeStyle = "black";
         ctx.lineWidth = 0.5;
-        for(var x = 0; x <= canvasRef.current.width; x += 20){
+        for(var x = 0; x <= grid.width; x += 20){
 			ctx.moveTo(x, 0);
-			ctx.lineTo(x, canvasRef.current.width);
+			ctx.lineTo(x, grid.height);
 		}
         ctx.stroke();
-        for(var y = 0; y <= canvasRef.current.height; y += 20){
+        for(var y = 0; y <= grid.height; y += 20){
 			ctx.moveTo(0, y);
-			ctx.lineTo(canvasRef.current.height, y);
+			ctx.lineTo(grid.width, y);
 		}
         ctx.stroke();
         ctx.closePath();
 
         gridCtxRef.current = ctx;
 
-    }, [gridOn]);
+    }, [gridOn, frameCount, rowCount]);
     
 
     //funciones de dibujado en canvas
@@ -198,7 +205,12 @@ function DrawingSpace(){
 
     return (
         <div className="drawingSpace">
-            <TopBar />
+            <TopBar 
+            setFrameCount={setFrameCount}
+            setRowCount={setRowCount}
+            frameCount={frameCount}
+            rowCount={rowCount}
+            />
 
             <canvas id="mainCanvas"
             ref={canvasRef}

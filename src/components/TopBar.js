@@ -4,18 +4,34 @@ import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import './assets/TopBar.css';
 
-function TopBar() {
+function TopBar({setFrameCount, setRowCount, frameCount, rowCount}) {
 
     return (
         <div className="topBar fixed-top">
             <ButtonGroup id="topBarButtonGroup" vertical>
                 <ButtonGroup size="lg">
-                <Button variant="secondary">Remove Frame</Button>
-                <Button variant="secondary">Add Frame</Button>
+                <Button variant="secondary" onClick={() => {
+                                                if(frameCount > 1){
+                                                    let i = frameCount - 1;
+                                                    setFrameCount(i);
+                                                }
+                                            }}>Remove Frame</Button>
+                <Button variant="secondary" onClick={() => {
+                                                let i = frameCount + 1;
+                                                setFrameCount(i);
+                                            }}>Add Frame</Button>
 
                 <ButtonGroup vertical>
-                    <Button variant="secondary">Remove Row</Button>
-                    <Button variant="secondary">Add Row</Button>
+                    <Button variant="secondary" onClick={() => {
+                                                if(rowCount > 1){
+                                                    let i = rowCount - 1;
+                                                    setRowCount(i);
+                                                }
+                                            }}>Remove Row</Button>
+                    <Button variant="secondary" onClick={() => {
+                                                let i = rowCount + 1;
+                                                setRowCount(i);
+                                            }}>Add Row</Button>
                 </ButtonGroup>
                 </ButtonGroup>
             </ButtonGroup>
