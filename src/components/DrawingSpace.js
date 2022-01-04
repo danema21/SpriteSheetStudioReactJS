@@ -18,9 +18,10 @@ function DrawingSpace(){
     const [frameCount, setFrameCount] = useState(1);
     const [rowCount, setRowCount] = useState(1);
 
-    //inicializacion cuando el componente se monta por primera vez
+    //controladores de cambio en el canvas y grid
     useEffect(() => {
         const canvas = canvasRef.current;
+        let canvasData = canvas.toDataURL();
         canvas.width = frameCount * 320; //320 tamanio default
         canvas.height = rowCount * 320; //320 tamanio default
 
@@ -30,6 +31,7 @@ function DrawingSpace(){
         ctx.strokeStyle = lineColor;
         ctx.lineWidth = lineWidth;
         canvasCtxRef.current = ctx;
+        drawSavedCanvas(canvasData);
     }, [lineWidth, lineColor, frameCount, rowCount]);
 
     useEffect(() => {
@@ -81,6 +83,14 @@ function DrawingSpace(){
     
 
     //funciones de dibujado en canvas
+    const drawSavedCanvas = (canvasData) => {
+        let canvasImg = new Image();
+        canvasImg.src = canvasData;
+        canvasImg.onload = () => {
+            canvasCtxRef.current.drawImage(canvasImg, 0, 0);
+        }
+    }
+
     const startDrawing = (e) => {
         canvasCtxRef.current.beginPath();
         canvasCtxRef.current.moveTo(
