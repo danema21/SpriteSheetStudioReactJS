@@ -46,16 +46,32 @@ function DrawingSpace(){
         const ctx = grid.getContext("2d");
         ctx.beginPath();
         ctx.strokeStyle = "black";
-        ctx.lineWidth = 0.5;
-        for(var x = 0; x <= grid.width; x += 20){
+        ctx.lineWidth = 0.8;
+        for(let x = 0; x <= grid.width; x += 20){
 			ctx.moveTo(x, 0);
 			ctx.lineTo(x, grid.height);
 		}
         ctx.stroke();
-        for(var y = 0; y <= grid.height; y += 20){
+        for(let y = 0; y <= grid.height; y += 20){
 			ctx.moveTo(0, y);
 			ctx.lineTo(grid.width, y);
 		}
+        ctx.stroke();
+        ctx.closePath();
+
+        ctx.beginPath()
+        ctx.strokeStyle = "blue";
+        
+        for(let x = 0; x <= grid.width; x += 320){
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, grid.height);
+        }
+
+        for(let y = 0; y <= grid.height; y += 320){
+            ctx.moveTo(0, y);
+            ctx.lineTo(grid.width, y);
+        }
+
         ctx.stroke();
         ctx.closePath();
 

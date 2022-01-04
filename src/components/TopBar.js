@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import './assets/TopBar.css';
 
 function TopBar({setFrameCount, setRowCount, frameCount, rowCount}) {
+    const [frames, setFrames] = useState([1]);
 
     return (
         <div className="topBar fixed-top">
@@ -14,11 +15,16 @@ function TopBar({setFrameCount, setRowCount, frameCount, rowCount}) {
                                                 if(frameCount > 1){
                                                     let i = frameCount - 1;
                                                     setFrameCount(i);
+
+                                                    let newFramesList = [...frames];
+                                                    newFramesList.splice(frameCount-1, 1);
+                                                    setFrames(newFramesList);
                                                 }
                                             }}>Remove Frame</Button>
                 <Button variant="secondary" onClick={() => {
                                                 let i = frameCount + 1;
                                                 setFrameCount(i);
+                                                setFrames([...frames, i]);
                                             }}>Add Frame</Button>
 
                 <ButtonGroup vertical>
@@ -38,7 +44,9 @@ function TopBar({setFrameCount, setRowCount, frameCount, rowCount}) {
 
             <div id="framesBar">
                 <ButtonGroup size="sm">
-                <Button variant='dark'>1</Button>
+                {frames.map((frame, index) => (
+                    <Button variant='dark' index={index}>{frame}</Button>
+                ))}
                 </ButtonGroup>
             </div>
 
