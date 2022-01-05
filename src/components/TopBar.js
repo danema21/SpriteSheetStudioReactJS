@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import './assets/TopBar.css';
 
-function TopBar({setFrameCount, setRowCount, frameCount, rowCount}) {
+function TopBar({setFrameCount, setRowCount, frameCount, rowCount, setUndoStack, setRedoStack, undoStack, redoStack, canvasCtxRef}) {
     const [frames, setFrames] = useState([1]);
 
     return (
@@ -44,16 +44,32 @@ function TopBar({setFrameCount, setRowCount, frameCount, rowCount}) {
 
             <div id="framesBar">
                 <ButtonGroup size="sm">
-                {frames.map((frame, index) => (
-                    <Button variant='dark' index={index}>{frame}</Button>
+                {frames.map((frame, i) => (
+                    <Button variant='dark' key={i}>{frame}</Button>
                 ))}
                 </ButtonGroup>
             </div>
 
             <div id="undoRedo">
                 <ButtonGroup>
-                <Button variant='secondary'>undo</Button>
-                <Button variant='secondary'>redo</Button>
+                <Button variant='secondary' onClick={() => {
+                    if(undoStack.length > 1){
+                        console.log("deshice");
+                        redoStack.unshift(undoStack.pop());
+                        canvasCtxRef.current.putImageData(undoStack[undoStack.length-1], 0, 0);
+                        setUndoStack(undoStack);
+                        setRedoStack(redoStack);
+                    }
+                }}>undo</Button>
+                <Button variant='secondary' onClick={() => {
+                    if(redoStack.length){
+                        console.log("rehice");
+                        canvasCtxRef.current.putImageData(redoStack[0], 0, 0);
+                        undoStack.push(redoStack.shift());
+                        setUndoStack(undoStack);
+                        setRedoStack(redoStack);
+                    }
+                }}>redo</Button>
                 </ButtonGroup>
             </div>
         </div>

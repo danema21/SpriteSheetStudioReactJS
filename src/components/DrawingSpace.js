@@ -17,6 +17,8 @@ function DrawingSpace(){
     const [gridOn, setGridOn] = useState(true);
     const [frameCount, setFrameCount] = useState(1);
     const [rowCount, setRowCount] = useState(1);
+    const [undoStack, setUndoStack] = useState([]);
+    const [redoStack, setRedoStack] = useState([]);
 
     //controladores de cambio en el canvas y grid
     useEffect(() => {
@@ -83,14 +85,6 @@ function DrawingSpace(){
     
 
     //funciones de dibujado en canvas
-    const drawSavedCanvas = (canvasData) => {
-        let canvasImg = new Image();
-        canvasImg.src = canvasData;
-        canvasImg.onload = () => {
-            canvasCtxRef.current.drawImage(canvasImg, 0, 0);
-        }
-    }
-
     const startDrawing = (e) => {
         canvasCtxRef.current.beginPath();
         canvasCtxRef.current.moveTo(
@@ -103,6 +97,7 @@ function DrawingSpace(){
     const endDrawing = () => {
         canvasCtxRef.current.closePath();
         setIsDrawing(false);
+        recordAction();
     };
 
     const draw = (e) => {
@@ -229,6 +224,21 @@ function DrawingSpace(){
         
     };
 
+    //funciones de manipulacion de datos del canvas
+    const drawSavedCanvas = (canvasData) => {
+        let canvasImg = new Image();
+        canvasImg.src = canvasData;
+        canvasImg.onload = () => {
+            canvasCtxRef.current.drawImage(canvasImg, 0, 0);
+        }
+    }
+
+    const recordAction = () => {
+        undoStack.push(canvasCtxRef.current.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height));
+        setUndoStack(undoStack);
+    };
+
+
     return (
         <div className="drawingSpace">
             <TopBar 
@@ -236,6 +246,11 @@ function DrawingSpace(){
             setRowCount={setRowCount}
             frameCount={frameCount}
             rowCount={rowCount}
+            setUndoStack={setUndoStack}
+            setRedoStack={setRedoStack}
+            undoStack={undoStack}
+            redoStack={redoStack}
+            canvasCtxRef={canvasCtxRef}
             />
 
             <canvas id="mainCanvas"
