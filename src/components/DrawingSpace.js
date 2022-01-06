@@ -235,9 +235,11 @@ function DrawingSpace(){
 
     const recordAction = () => {
         undoStack.push(canvasCtxRef.current.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height));
+        setRedoStack([])
         setUndoStack(undoStack);
     };
 
+    window.onload = recordAction;
 
     return (
         <div className="drawingSpace">
@@ -266,7 +268,6 @@ function DrawingSpace(){
             onMouseDown={startDrawing}
             onTouchStart={startDrawing}
             onMouseUp={endDrawing}
-            onMouseOut={endDrawing}
             onMouseMove={draw}
             onTouchMove={draw}
             />

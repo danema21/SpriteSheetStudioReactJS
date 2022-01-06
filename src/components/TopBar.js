@@ -7,6 +7,26 @@ import './assets/TopBar.css';
 function TopBar({setFrameCount, setRowCount, frameCount, rowCount, setUndoStack, setRedoStack, undoStack, redoStack, canvasCtxRef}) {
     const [frames, setFrames] = useState([1]);
 
+    const undo = () => {
+        if(undoStack.length > 1){
+            redoStack.unshift(undoStack.pop())
+            setRedoStack(redoStack);
+            setUndoStack(undoStack);
+
+            canvasCtxRef.current.putImageData(undoStack[undoStack.length-1], 0, 0);
+        }
+    };
+
+    const redo = () => {
+        if(redoStack.length > 0){
+            canvasCtxRef.current.putImageData(redoStack[0], 0, 0);
+           
+            undoStack.push(redoStack.shift());
+            setUndoStack(undoStack);
+            setRedoStack(redoStack);
+        }
+    }
+
     return (
         <div className="topBar fixed-top">
             <ButtonGroup id="topBarButtonGroup" vertical>
@@ -52,24 +72,8 @@ function TopBar({setFrameCount, setRowCount, frameCount, rowCount, setUndoStack,
 
             <div id="undoRedo">
                 <ButtonGroup>
-                <Button variant='secondary' onClick={() => {
-                    if(undoStack.length > 1){
-                        console.log("deshice");
-                        redoStack.unshift(undoStack.pop());
-                        canvasCtxRef.current.putImageData(undoStack[undoStack.length-1], 0, 0);
-                        setUndoStack(undoStack);
-                        setRedoStack(redoStack);
-                    }
-                }}>undo</Button>
-                <Button variant='secondary' onClick={() => {
-                    if(redoStack.length){
-                        console.log("rehice");
-                        canvasCtxRef.current.putImageData(redoStack[0], 0, 0);
-                        undoStack.push(redoStack.shift());
-                        setUndoStack(undoStack);
-                        setRedoStack(redoStack);
-                    }
-                }}>redo</Button>
+                <Button variant='secondary' onClick={undo}>undo</Button>
+                <Button variant='secondary' onClick={redo}>redo</Button>
                 </ButtonGroup>
             </div>
         </div>
