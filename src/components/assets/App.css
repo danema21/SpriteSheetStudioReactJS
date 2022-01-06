@@ -23,8 +23,10 @@
 /***********************************/
 
 body{
-  background-image: linear-gradient(to right, violet 0%, skyblue 100%);
-  
+  background-color: #e5e5f7;
+  opacity: 1;
+  background: radial-gradient(circle, transparent 20%, #e5e5f7 20%, #e5e5f7 80%, transparent 80%, transparent), radial-gradient(circle, transparent 20%, #e5e5f7 20%, #e5e5f7 80%, transparent 80%, transparent) 45px 45px, linear-gradient(#1e5a1a 3.6px, transparent 3.6px) 0 -1.8px, linear-gradient(90deg, #1e5a1a 3.6px, #e5e5f7 3.6px) -1.8px 0;
+  background-size: 90px 90px, 90px 90px, 45px 45px, 45px 45px;
 }
 
 .App {
