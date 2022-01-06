@@ -11,7 +11,7 @@ function DrawingSpace(){
     const canvasCtxRef = useRef(null);
     const gridCtxRef = useRef(null);
     const [isDrawing, setIsDrawing] = useState(false);
-    const [lineWidth, setLineWidth] = useState(5);
+    const [lineWidth, setLineWidth] = useState(1);
     const [lineColor, setLineColor] = useState("black");
     const [tool, setTool] = useState("brush");
     const [gridOn, setGridOn] = useState(true);
@@ -19,13 +19,15 @@ function DrawingSpace(){
     const [rowCount, setRowCount] = useState(1);
     const [undoStack, setUndoStack] = useState([]);
     const [redoStack, setRedoStack] = useState([]);
+    const newWidth = useRef(16);
+    const newHeight = useRef(16);
 
     //controladores de cambio en el canvas y grid
     useEffect(() => {
         const canvas = canvasRef.current;
         let canvasData = canvas.toDataURL();
-        canvas.width = frameCount * 320; //320 tamanio default
-        canvas.height = rowCount * 320; //320 tamanio default
+        canvas.width = frameCount * newWidth.current * 20; //20 escala default
+        canvas.height = rowCount * newHeight.current * 20; //20 escala default
 
         const ctx = canvas.getContext("2d");
         ctx.lineCap = "round";
@@ -44,8 +46,8 @@ function DrawingSpace(){
         }
 
         const grid = gridRef.current;
-        grid.width = frameCount * 320; //320 tamanio default
-        grid.height = rowCount * 320; //320 tamanio default
+        grid.width = frameCount * newWidth.current * 20; //20 escala default
+        grid.height = rowCount * newHeight.current * 20; //20 escala default
 
         const ctx = grid.getContext("2d");
         ctx.beginPath();
@@ -66,12 +68,12 @@ function DrawingSpace(){
         ctx.beginPath()
         ctx.strokeStyle = "blue";
         
-        for(let x = 0; x <= grid.width; x += 320){
+        for(let x = 0; x <= grid.width; x += (newWidth.current*20)){
             ctx.moveTo(x, 0);
             ctx.lineTo(x, grid.height);
         }
 
-        for(let y = 0; y <= grid.height; y += 320){
+        for(let y = 0; y <= grid.height; y += (newHeight.current*20)){
             ctx.moveTo(0, y);
             ctx.lineTo(grid.width, y);
         }
@@ -277,6 +279,13 @@ function DrawingSpace(){
             setLineWidth={setLineWidth}
             setTool={setTool}
             setGridOn={setGridOn}
+            newWidth={newWidth}
+            newHeight={newHeight}
+            canvasRef={canvasRef}
+            setFrameCount={setFrameCount}
+            setRowCount={setRowCount}
+            setUndoStack={setUndoStack}
+            setRedoStack={setRedoStack}
             />
         </div>
     );
