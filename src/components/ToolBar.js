@@ -23,6 +23,16 @@ function ToolBar({setLineColor, setLineWidth, setTool, setGridOn, newWidth, newH
         setGridOn(false);
     }
 
+    const saveProyect = () => {
+        let imgUrl = canvasRef.current.toDataURL();
+        let tmpLink = document.createElement('a');
+        tmpLink.download = 'image.png'
+        tmpLink.href = imgUrl;
+        document.body.appendChild(tmpLink);
+        tmpLink.click();
+        document.body.removeChild(tmpLink);
+    }
+
     const reset = () => {
         hideNewModal();
         newWidth.current = canvasRef.current.width / 20;
@@ -94,6 +104,7 @@ function ToolBar({setLineColor, setLineWidth, setTool, setGridOn, newWidth, newH
                     <Dropdown.Item onClick={showNewModal}>New...</Dropdown.Item>
                     <Dropdown.Item>Open...</Dropdown.Item>
                     <Dropdown.Item>Animation preview</Dropdown.Item>
+                    <Dropdown.Item onClick={saveProyect}>Save</Dropdown.Item>
                     <Dropdown.Item>Help</Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
