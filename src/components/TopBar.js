@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
@@ -6,6 +6,14 @@ import './assets/TopBar.css';
 
 function TopBar({setFrameCount, setRowCount, frameCount, rowCount, setUndoStack, setRedoStack, undoStack, redoStack, canvasCtxRef}) {
     const [frames, setFrames] = useState([1]);
+
+    useEffect(() => {
+        let newlist = [];
+        for(let i = 1; i <= frameCount; i++){
+            newlist.push(i);
+        }
+        setFrames(newlist);
+    }, [frameCount, rowCount]);
 
     const undo = () => {
         if(undoStack.length > 1){

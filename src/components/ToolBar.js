@@ -38,13 +38,14 @@ function ToolBar({setLineColor, setLineWidth, setTool, setGridOn, newWidth, newH
                 canvasRef.current.width = userImg.width;
                 canvasRef.current.height = userImg.height;
                 canvasRef.current.getContext('2d').drawImage(userImg, 0, 0);
+                
+                setFrameCount(userImg.width / (newWidth.current*20));
+                setRowCount(userImg.height / (newHeight.current*20));
             };
             userImg.src = event.target.result;
         };
         reader.readAsDataURL(e.target.files[0]);
 
-        setFrameCount(1);
-        setRowCount(1);
         setUndoStack([canvasRef.current.getContext('2d').getImageData(0 , 0, canvasRef.current.width, canvasRef.current.height)]);
         setRedoStack([]);
         setGridOn(false);

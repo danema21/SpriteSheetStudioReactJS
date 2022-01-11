@@ -36,6 +36,7 @@ function DrawingSpace(){
         ctx.lineWidth = lineWidth;
         canvasCtxRef.current = ctx;
         drawSavedCanvas(canvasData);
+        
     }, [lineWidth, lineColor, frameCount, rowCount]);
 
     useEffect(() => {
