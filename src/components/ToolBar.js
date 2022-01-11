@@ -8,11 +8,14 @@ import Button from 'react-bootstrap/Button';
 
 function ToolBar({setLineColor, setLineWidth, setTool, setGridOn, newWidth, newHeight, canvasRef, setFrameCount, setRowCount, setUndoStack, setRedoStack}){
     const [newModalShow, setNewModalShow] = useState(false);
+    const [openModalShow, setOpenModalShow] = useState(false);
 
     const showNewModal = () => setNewModalShow(true);
+    const showOpenModal = () => setOpenModalShow(true);
     const hideNewModal = () => setNewModalShow(false);
+    const hideOpenModal = () => setOpenModalShow(false);
 
-    const createNewProyect = () => {
+    const createNewProject = () => {
         hideNewModal();
         canvasRef.current.width = newWidth.current * 20;
         canvasRef.current.height = newHeight.current * 20;
@@ -21,9 +24,33 @@ function ToolBar({setLineColor, setLineWidth, setTool, setGridOn, newWidth, newH
         setUndoStack([canvasRef.current.getContext('2d').getImageData(0 , 0, canvasRef.current.width, canvasRef.current.height)]);
         setRedoStack([]);
         setGridOn(false);
-    }
+        
+    };
 
-    const saveProyect = () => {
+    const openProject = (e) => {
+        if(e.target.files[0] === undefined){return};
+        hideOpenModal();
+        let reader = new FileReader();
+        reader.onload = (event) => {
+            let userImg = new Image();
+            userImg.onload = () => {
+                canvasRef.current.getContext('2d').clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+                canvasRef.current.width = userImg.width;
+                canvasRef.current.height = userImg.height;
+                canvasRef.current.getContext('2d').drawImage(userImg, 0, 0);
+            };
+            userImg.src = event.target.result;
+        };
+        reader.readAsDataURL(e.target.files[0]);
+
+        setFrameCount(1);
+        setRowCount(1);
+        setUndoStack([canvasRef.current.getContext('2d').getImageData(0 , 0, canvasRef.current.width, canvasRef.current.height)]);
+        setRedoStack([]);
+        setGridOn(false);
+    };
+
+    const saveProject = () => {
         let imgUrl = canvasRef.current.toDataURL();
         let tmpLink = document.createElement('a');
         tmpLink.download = 'image.png'
@@ -35,6 +62,7 @@ function ToolBar({setLineColor, setLineWidth, setTool, setGridOn, newWidth, newH
 
     const reset = () => {
         hideNewModal();
+        hideOpenModal();
         newWidth.current = canvasRef.current.width / 20;
         newHeight.current = canvasRef.current.height /20;
     }
@@ -102,9 +130,9 @@ function ToolBar({setLineColor, setLineWidth, setTool, setGridOn, newWidth, newH
 
                 <Dropdown.Menu>
                     <Dropdown.Item onClick={showNewModal}>New...</Dropdown.Item>
-                    <Dropdown.Item>Open...</Dropdown.Item>
+                    <Dropdown.Item onClick={showOpenModal}>Open...</Dropdown.Item>
                     <Dropdown.Item>Animation preview</Dropdown.Item>
-                    <Dropdown.Item onClick={saveProyect}>Save</Dropdown.Item>
+                    <Dropdown.Item onClick={saveProject}>Save</Dropdown.Item>
                     <Dropdown.Item>Help</Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
@@ -121,7 +149,20 @@ function ToolBar({setLineColor, setLineWidth, setTool, setGridOn, newWidth, newH
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={reset} variant='dark'>Cancel</Button>
-                    <Button onClick={createNewProyect} variant='dark'>Create</Button>
+                    <Button onClick={createNewProject} variant='dark'>Create</Button>
+                </Modal.Footer>
+            </Modal>
+
+            <Modal show={openModalShow} onHide={hideOpenModal} backdrop="static" centered>
+                <Modal.Header>
+                    <Modal.Title>Open proyect</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <h6>Choose an image from your device:</h6>
+                    <input onChange={openProject} name="imageLoader" type="file" accept="image/*" />
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={reset} variant='dark'>Cancel</Button>
                 </Modal.Footer>
             </Modal>
         </div>
