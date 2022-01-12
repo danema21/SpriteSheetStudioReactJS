@@ -223,7 +223,7 @@ function ToolBar({setLineColor, setLineWidth, setTool, setGridOn, newWidth, newH
                     <label>row: <input id="animRows" type="number" min="1" className='w-25'/></label><br></br>
                     <label>speed: <input id="animSpeed" type="number" min="1" max="60" className='w-50'/></label><br></br>
                     <br></br><br></br>
-                    <h6>previsualization of the current row animation:</h6>
+                    <h6>preview of the current row animation:</h6>
                     <canvas id="animCanvas" width={`160px`} height={`160px`}/>
                 </Modal.Body>
                 <Modal.Footer>
