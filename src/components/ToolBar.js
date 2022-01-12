@@ -159,6 +159,11 @@ function ToolBar({setLineColor, setLineWidth, setTool, setGridOn, newWidth, newH
                     <Modal.Title>Open proyect</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                    <h6>Set width and height of the grid separator:</h6>
+                    <label>width: <input type="number" onChange={(e) => newWidth.current = e.target.value} className='w-50' min='1' max='32' /></label>
+                    <br></br><br></br>
+                    <label>height: <input type="number" onChange={(e) => newHeight.current = e.target.value} className='w-50' min='1' max='32' /></label>
+                    <br></br><br></br>
                     <h6>Choose an image from your device:</h6>
                     <input onChange={openProject} name="imageLoader" type="file" accept="image/*" />
                 </Modal.Body>

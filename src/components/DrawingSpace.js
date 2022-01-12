@@ -28,6 +28,8 @@ function DrawingSpace(){
         let canvasData = canvas.toDataURL();
         canvas.width = frameCount * newWidth.current * 20; //20 escala default
         canvas.height = rowCount * newHeight.current * 20; //20 escala default
+        document.getElementById("spacer").style.width = canvas.width + 'px';
+        document.getElementById("spacer").style.height = canvas.height + 'px';
 
         const ctx = canvas.getContext("2d");
         ctx.lineCap = "round";
@@ -255,6 +257,7 @@ function DrawingSpace(){
             setRedoStack={setRedoStack}
             undoStack={undoStack}
             redoStack={redoStack}
+            canvasRef={canvasRef}
             canvasCtxRef={canvasCtxRef}
             />
 
@@ -274,6 +277,8 @@ function DrawingSpace(){
             onMouseMove={draw}
             onTouchMove={draw}
             />
+
+            <div id='spacer'/>
 
             <ToolBar 
             setLineColor={setLineColor}

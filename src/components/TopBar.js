@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import './assets/TopBar.css';
 
-function TopBar({setFrameCount, setRowCount, frameCount, rowCount, setUndoStack, setRedoStack, undoStack, redoStack, canvasCtxRef}) {
+function TopBar({setFrameCount, setRowCount, frameCount, rowCount, setUndoStack, setRedoStack, undoStack, redoStack, canvasRef, canvasCtxRef}) {
     const [frames, setFrames] = useState([1]);
 
     useEffect(() => {
@@ -33,7 +33,14 @@ function TopBar({setFrameCount, setRowCount, frameCount, rowCount, setUndoStack,
             setUndoStack(undoStack);
             setRedoStack(redoStack);
         }
-    }
+    };
+
+    const frameClick = (number) => {
+        console.log(number);
+        let newPosition = (canvasRef.current.width / frameCount) * number;
+        document.getElementById("mainCanvas").style.left = -newPosition + 'px';
+        document.getElementById("gridCanvas").style.left = -newPosition + 'px';
+    };
 
     return (
         <div className="topBar fixed-top">
@@ -72,8 +79,8 @@ function TopBar({setFrameCount, setRowCount, frameCount, rowCount, setUndoStack,
 
             <div id="framesBar">
                 <ButtonGroup size="sm">
-                {frames.map((frame, i) => (
-                    <Button variant='dark' key={i}>{frame}</Button>
+                {frames.map((frame, key) => (
+                    <Button onClick={() => frameClick(key)} variant='dark' key={key}>{frame}</Button>
                 ))}
                 </ButtonGroup>
             </div>

@@ -14,3 +14,16 @@
 	background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
     z-index: -1;
 }
+
+#gridCanvas{
+    position: absolute;
+    display: block;
+}
+
+#spacer{
+    display: block;
+    opacity: 0;
+    margin-bottom: 50px;
+    margin-left: 10px;
+    z-index: -2;
+}
