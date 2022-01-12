@@ -9,11 +9,14 @@ import Button from 'react-bootstrap/Button';
 function ToolBar({setLineColor, setLineWidth, setTool, setGridOn, newWidth, newHeight, canvasRef, setFrameCount, setRowCount, setUndoStack, setRedoStack}){
     const [newModalShow, setNewModalShow] = useState(false);
     const [openModalShow, setOpenModalShow] = useState(false);
+    const [animationModalShow, setAnimationModalShow] = useState(false);
 
     const showNewModal = () => setNewModalShow(true);
     const showOpenModal = () => setOpenModalShow(true);
+    const showAnimationModal = () => setAnimationModalShow(true);
     const hideNewModal = () => setNewModalShow(false);
     const hideOpenModal = () => setOpenModalShow(false);
+    const hideAnimationModal = () => setAnimationModalShow(false);
 
     const createNewProject = () => {
         hideNewModal();
@@ -49,6 +52,44 @@ function ToolBar({setLineColor, setLineWidth, setTool, setGridOn, newWidth, newH
         setUndoStack([canvasRef.current.getContext('2d').getImageData(0 , 0, canvasRef.current.width, canvasRef.current.height)]);
         setRedoStack([]);
         setGridOn(false);
+    };
+
+    const animationPreview = () => {
+        const animCanvas = document.getElementById("animCanvas");
+        animCanvas.getContext("2d").clearRect(0, 0, animCanvas.width, animCanvas.height);
+        let spriteSheet = new Image();
+        spriteSheet.src = canvasRef.current.toDataURL();
+        let srcX = 0;
+        let srcY = 0;
+        let currentFrame = 0;
+        let animationBrake = 0;
+        let animationInterval = 60;
+        let frameWidth = newWidth.current * 20;
+        let frameHeight = newHeight.current * 20;
+        spriteSheet.onload = () => requestAnimationFrame(animate);
+        const updateFrame = () => {
+            currentFrame = ++currentFrame % document.getElementById("animFrames").value;
+            srcX = frameWidth * currentFrame;
+            srcY = (frameHeight *  document.getElementById("animRows").value) - frameHeight;
+        };
+
+        const drawFrame = () => {
+            updateFrame();
+            animCanvas.getContext("2d").drawImage(spriteSheet, srcX, srcY, frameWidth, frameHeight, 0, 0, animCanvas.width, animCanvas.height);
+        };
+
+        const animate = () => {
+            if(animationBrake > animationInterval){
+                animCanvas.getContext("2d").clearRect(0, 0, animCanvas.width, animCanvas.height);
+                drawFrame();
+                animationBrake = 0;
+            }
+            animationBrake++;
+            animationInterval = 60 - document.getElementById("animSpeed").value;
+            if(animationModalShow === true){
+                requestAnimationFrame(animate);
+            }
+        };
     };
 
     const saveProject = () => {
@@ -132,7 +173,7 @@ function ToolBar({setLineColor, setLineWidth, setTool, setGridOn, newWidth, newH
                 <Dropdown.Menu>
                     <Dropdown.Item onClick={showNewModal}>New...</Dropdown.Item>
                     <Dropdown.Item onClick={showOpenModal}>Open...</Dropdown.Item>
-                    <Dropdown.Item>Animation preview</Dropdown.Item>
+                    <Dropdown.Item onClick={showAnimationModal}>Animation preview</Dropdown.Item>
                     <Dropdown.Item onClick={saveProject}>Save</Dropdown.Item>
                     <Dropdown.Item>Help</Dropdown.Item>
                 </Dropdown.Menu>
@@ -169,6 +210,25 @@ function ToolBar({setLineColor, setLineWidth, setTool, setGridOn, newWidth, newH
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={reset} variant='dark'>Cancel</Button>
+                </Modal.Footer>
+            </Modal>
+
+            <Modal show={animationModalShow} onHide={hideAnimationModal} backdrop="static" centered>
+                <Modal.Header>
+                    <Modal.Title>Animation preview</Modal.Title>
+                </Modal.Header>
+                <Modal.Body className='text-center'>
+                    <h6>Set the configuration: </h6>
+                    <label>frames: <input id="animFrames" type="number" min="1" className='w-25'/></label><br></br>
+                    <label>row: <input id="animRows" type="number" min="1" className='w-25'/></label><br></br>
+                    <label>speed: <input id="animSpeed" type="number" min="1" max="60" className='w-50'/></label><br></br>
+                    <br></br><br></br>
+                    <h6>previsualization of the current row animation:</h6>
+                    <canvas id="animCanvas" width={`160px`} height={`160px`}/>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={hideAnimationModal} variant='dark'>Close</Button>
+                    <Button onClick={animationPreview} variant='dark'>Play</Button>
                 </Modal.Footer>
             </Modal>
         </div>

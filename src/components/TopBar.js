@@ -36,7 +36,6 @@ function TopBar({setFrameCount, setRowCount, frameCount, rowCount, setUndoStack,
     };
 
     const frameClick = (number) => {
-        console.log(number);
         let newPosition = (canvasRef.current.width / frameCount) * number;
         document.getElementById("mainCanvas").style.left = -newPosition + 'px';
         document.getElementById("gridCanvas").style.left = -newPosition + 'px';
