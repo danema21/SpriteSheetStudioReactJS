@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/SpriteSheetStudioReactJS/static/css/main.6b3942d0.css",
+    "main.js": "/SpriteSheetStudioReactJS/static/js/main.c1400aeb.js",
+    "static/js/787.3a042809.chunk.js": "/SpriteSheetStudioReactJS/static/js/787.3a042809.chunk.js",
+    "index.html": "/SpriteSheetStudioReactJS/index.html",
+    "main.6b3942d0.css.map": "/SpriteSheetStudioReactJS/static/css/main.6b3942d0.css.map",
+    "main.c1400aeb.js.map": "/SpriteSheetStudioReactJS/static/js/main.c1400aeb.js.map",
+    "787.3a042809.chunk.js.map": "/SpriteSheetStudioReactJS/static/js/787.3a042809.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.6b3942d0.css",
+    "static/js/main.c1400aeb.js"
+  ]
+}
