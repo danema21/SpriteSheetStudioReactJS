@@ -105,7 +105,6 @@ function DrawingSpace(){
                 let image = canvasCtxRef.current.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);
                 let pixelData = canvasCtxRef.current.getImageData(e.nativeEvent.offsetX, e.nativeEvent.offsetY, 1, 1).data;
                 let numPixels = image.data.length / 4;
-
                 const hexToRgbA = (hex) => {
                     let c;
                     if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
@@ -123,12 +122,15 @@ function DrawingSpace(){
                 let currentR = currentColor.split(',')[0];
                 let currentG = currentColor.split(',')[1];
                 let currentB = currentColor.split(',')[2];
-
+                
                 for(let i = 0; i < numPixels; i++){
-                    image.data[i * 4] = currentR;
-                    image.data[i * 4 + 1] = currentG;
-                    image.data[i * 4 + 2] = currentB;
-                    image.data[i * 4 + 3] = 255;
+
+                    if(pixelData[0] === image.data[i * 4] && pixelData[1] === image.data[i * 4 + 1] && pixelData[2] === image.data[i * 4 + 2] && pixelData[3] === image.data[i * 4 + 3]){
+                        image.data[i * 4] = currentR;
+                        image.data[i * 4 + 1] = currentG;
+                        image.data[i * 4 + 2] = currentB;
+                        image.data[i * 4 + 3] = 255;
+                    }
                 }
                 
                 canvasCtxRef.current.putImageData(image, 0, 0);
