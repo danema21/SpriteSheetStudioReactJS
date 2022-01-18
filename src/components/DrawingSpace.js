@@ -10,6 +10,7 @@ function DrawingSpace(){
     const gridRef = useRef(null);
     const canvasCtxRef = useRef(null);
     const gridCtxRef = useRef(null);
+    const auxCanvasRef = useRef(null);
     const [isDrawing, setIsDrawing] = useState(false);
     const [lineWidth, setLineWidth] = useState(1);
     const [lineColor, setLineColor] = useState("#000000");
@@ -21,6 +22,8 @@ function DrawingSpace(){
     const [redoStack, setRedoStack] = useState([]);
     const newWidth = useRef(16);
     const newHeight = useRef(16);
+    const copyActive = useRef(false);
+    const stampActive = useRef(false);
 
     //controladores de cambio en el canvas y grid
     useEffect(() => {
@@ -122,96 +125,53 @@ function DrawingSpace(){
                 let currentR = currentColor.split(',')[0];
                 let currentG = currentColor.split(',')[1];
                 let currentB = currentColor.split(',')[2];
-                
-                for(let i = 0; i < numPixels; i++){
 
-                    if(pixelData[0] === image.data[i * 4] && pixelData[1] === image.data[i * 4 + 1] && pixelData[2] === image.data[i * 4 + 2] && pixelData[3] === image.data[i * 4 + 3]){
-                        image.data[i * 4] = currentR;
-                        image.data[i * 4 + 1] = currentG;
-                        image.data[i * 4 + 2] = currentB;
-                        image.data[i * 4 + 3] = 255;
-                    }
+                const matchStartColor = (pixelPos) => {
+                    return (pixelData[0] === image.data[pixelPos * 4] && pixelData[1] === image.data[pixelPos * 4 + 1] && pixelData[2] === image.data[pixelPos * 4 + 2] && pixelData[3] === image.data[pixelPos * 4 + 3])
+                }
+
+                const colorPixel = (pixelPos) => {
+                    image.data[pixelPos * 4] = currentR;
+                    image.data[pixelPos * 4 + 1] = currentG;
+                    image.data[pixelPos * 4 + 2] = currentB;
+                    image.data[pixelPos * 4 + 3] = 255;
                 }
                 
+                for(let i = 0; i < numPixels; i++){
+                    if(matchStartColor(i)){
+                        colorPixel(i);
+                    }
+                }
+
                 canvasCtxRef.current.putImageData(image, 0, 0);
                 break;
+            
+            case "copy":
+                if(copyActive.current){
+                    let copiedImg = new Image();
+                    copiedImg.src = document.getElementById("auxCanvas").toDataURL();
+                    copiedImg.onload = () => {
+                        canvasCtxRef.current.drawImage(copiedImg, Math.floor(e.nativeEvent.offsetX / (newWidth.current*20)) * newWidth.current*20, Math.floor(e.nativeEvent.offsetY / (newHeight.current*20)) * newHeight.current*20);
+                        auxCanvasRef.current.getContext("2d").clearRect(0, 0, newWidth.current*20, newHeight.current*20);
+                    };
+                }else{
+                    let auxCanvas = auxCanvasRef.current;
+                    auxCanvas.width = newWidth.current*20;
+                    auxCanvas.height = newHeight.current*20;
+                    let copiedImg = new Image();
+                    copiedImg.src = canvasRef.current.toDataURL();
 
-                /* falta implementar (complejidad muy alta)
-                    let pixelData = canvasCtxRef.current.getImageData(e.nativeEvent.offsetX, e.nativeEvent.offsetY, 1, 1).data;
-                    let currentFillColor = lineColor.slice(5, lineColor.length-1);
-                    let fillColorR = currentFillColor.split(',')[0];
-                    let fillColorG = currentFillColor.split(',')[1];
-                    let fillColorB = currentFillColor.split(',')[2];
-                    
-                    let startR = pixelData[0];
-                    let startG = pixelData[1];
-                    let startB = pixelData[2];
+                    copiedImg.onload = () => {
+                        auxCanvas.getContext("2d").drawImage(copiedImg, Math.floor(e.nativeEvent.offsetX / (newWidth.current*20)) * newWidth.current*20, Math.floor(e.nativeEvent.offsetY / (newHeight.current*20)) * newHeight.current*20, newWidth.current*20, newHeight.current*20, 0, 0, newWidth.current*20, newHeight.current*20);
+                        copyActive.current = true; 
+                    };
+                }
+                break;
 
-                    let newPos, x, y, pixelPos;
-                    let colorLayer = canvasCtxRef.current.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);
+            case "stamp":
 
-                    let pixelStack = [[e.nativeEvent.offsetX, e.nativeEvent.offsetY]];
+                break;
 
-                    const matchStartColor = (pixelPos) => {
-                        let r = colorLayer.data[pixelPos];
-                        let g = colorLayer.data[pixelPos + 1];
-                        let b = colorLayer.data[pixelPos + 2];
-
-                        return (r === startR && g === startG && b === startB);
-                    }
-
-                    const colorPixel = (pixelPos) => {
-                        colorLayer.data[pixelPos] = fillColorR;
-                        colorLayer.data[pixelPos + 1] = fillColorG;
-                        colorLayer.data[pixelPos + 2] = fillColorB;
-                        colorLayer.data[pixelPos + 3] = 255;
-                    }
-                    let i = 0;
-                    while(i < 1000){
-                        i++;
-                        newPos = pixelStack.pop();
-                        x = newPos[0];
-                        y = newPos[1];
-
-                        pixelPos = (y * canvasRef.current.width + x) * 4;
-                        while(y-- >= 0 && matchStartColor(pixelPos)){
-                            pixelPos -= canvasRef.current.width * 4;
-                        }
-
-                        pixelPos += canvasRef.current.width * 4;
-                        ++y;
-                        let reachLeft = false;
-                        let reachRight = false;
-                        while(y++ < canvasRef.current.height - 1 && matchStartColor(pixelPos)){
-                            colorPixel(pixelPos);
-                            
-                            if(x > 0){
-                                if(matchStartColor(pixelPos - 4)){
-                                    if(!reachLeft){
-                                        pixelStack.push([x-1, y]);
-                                        reachLeft = true;
-                                    }else if(reachLeft){
-                                        reachLeft = false;
-                                    }
-                                }
-                            }
-
-                            if(x < canvasRef.current.width -1){
-                                if(matchStartColor(pixelPos + 4)){
-                                    if(!reachRight){
-                                        pixelStack.push([x+1, y]);
-                                        reachRight = true;
-                                    }else if(reachRight){
-                                        reachRight = false;
-                                    }
-                                }
-                            }
-
-                            pixelPos += canvasRef.current.width * 4;
-                        }
-                    }
-                    canvasCtxRef.current.putImageData(colorLayer, 0, 0);
-                    */
             default:
                 break;
         }
@@ -316,6 +276,11 @@ function DrawingSpace(){
             onTouchMove={draw}
             />
 
+            <canvas id='auxCanvas'
+            ref={auxCanvasRef}
+            width={`320px`}
+            height={`320px`}
+            />
             <div id='spacer'/>
 
             <ToolBar 

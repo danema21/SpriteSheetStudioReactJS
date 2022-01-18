@@ -121,6 +121,8 @@ function ToolBar({setLineColor, setLineWidth, setTool, setGridOn, newWidth, newH
                     <Dropdown.Item onClick={() => setTool("brush")}>brush</Dropdown.Item>
                     <Dropdown.Item onClick={() => setTool("eraser")}>eraser</Dropdown.Item>
                     <Dropdown.Item onClick={() => setTool("filler")}>filler</Dropdown.Item>
+                    <Dropdown.Item onClick={() => setTool("copy")}>copy</Dropdown.Item>
+                    <Dropdown.Item onClick={() => setTool("stamp")}>stamp</Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
             <input type="color"
