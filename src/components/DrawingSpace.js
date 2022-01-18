@@ -154,6 +154,7 @@ function DrawingSpace(){
                         canvasCtxRef.current.drawImage(copiedImg, Math.floor(e.nativeEvent.offsetX / (newWidth.current*20)) * newWidth.current*20, Math.floor(e.nativeEvent.offsetY / (newHeight.current*20)) * newHeight.current*20);
                         auxCanvasRef.current.getContext("2d").clearRect(0, 0, newWidth.current*20, newHeight.current*20);
                     };
+                    copyActive.current = false;
                 }else{
                     let auxCanvas = auxCanvasRef.current;
                     auxCanvas.width = newWidth.current*20;
@@ -169,16 +170,36 @@ function DrawingSpace(){
                 break;
 
             case "stamp":
+                if(stampActive.current){
+                    let copiedImg = new Image();
+                    copiedImg.src = document.getElementById("auxCanvas").toDataURL();
+                    copiedImg.onload = () => {
+                        gridCtxRef.current.globalAlpha = 0.4;
+                        gridCtxRef.current.drawImage(copiedImg, Math.floor(e.nativeEvent.offsetX / (newWidth.current*20)) * newWidth.current*20, Math.floor(e.nativeEvent.offsetY / (newHeight.current*20)) * newHeight.current*20);
+                        gridCtxRef.current.globalAlpha = 1;
+                        auxCanvasRef.current.getContext("2d").clearRect(0, 0, newWidth.current*20, newHeight.current*20);
+                    };
+                    stampActive.current = false;
+                }else{
+                    let auxCanvas = auxCanvasRef.current;
+                    auxCanvas.width = newWidth.current*20;
+                    auxCanvas.height = newHeight.current*20;
+                    let copiedImg = new Image();
+                    copiedImg.src = canvasRef.current.toDataURL();
 
+                    copiedImg.onload = () => {
+                        auxCanvas.getContext("2d").drawImage(copiedImg, Math.floor(e.nativeEvent.offsetX / (newWidth.current*20)) * newWidth.current*20, Math.floor(e.nativeEvent.offsetY / (newHeight.current*20)) * newHeight.current*20, newWidth.current*20, newHeight.current*20, 0, 0, newWidth.current*20, newHeight.current*20);
+                        stampActive.current = true; 
+                    };
+                }
                 break;
 
             default:
+                canvasCtxRef.current.closePath();
+                setIsDrawing(false);
+                recordAction();
                 break;
         }
-
-        canvasCtxRef.current.closePath();
-        setIsDrawing(false);
-        recordAction();
     };
 
     const draw = (e) => {
