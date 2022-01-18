@@ -23,8 +23,6 @@
 #auxCanvas{
     display: block;
     opacity: 0;
-    margin-top: 320px;
-    margin-left: 40px;
     z-index: -2;
 }
 

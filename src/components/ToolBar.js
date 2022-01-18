@@ -10,13 +10,16 @@ function ToolBar({setLineColor, setLineWidth, setTool, setGridOn, newWidth, newH
     const [newModalShow, setNewModalShow] = useState(false);
     const [openModalShow, setOpenModalShow] = useState(false);
     const [animationModalShow, setAnimationModalShow] = useState(false);
+    const [helpModalShow, setHelpModalShow] = useState(false);
 
     const showNewModal = () => setNewModalShow(true);
     const showOpenModal = () => setOpenModalShow(true);
     const showAnimationModal = () => setAnimationModalShow(true);
+    const showHelpModal = () => setHelpModalShow(true);
     const hideNewModal = () => setNewModalShow(false);
     const hideOpenModal = () => setOpenModalShow(false);
     const hideAnimationModal = () => setAnimationModalShow(false);
+    const hideHelpModal = () => setHelpModalShow(false);
 
     const createNewProject = () => {
         hideNewModal();
@@ -177,7 +180,7 @@ function ToolBar({setLineColor, setLineWidth, setTool, setGridOn, newWidth, newH
                     <Dropdown.Item onClick={showOpenModal}>Open...</Dropdown.Item>
                     <Dropdown.Item onClick={showAnimationModal}>Animation preview</Dropdown.Item>
                     <Dropdown.Item onClick={saveProject}>Save</Dropdown.Item>
-                    <Dropdown.Item>Help</Dropdown.Item>
+                    <Dropdown.Item onClick={showHelpModal}>Help</Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
 
@@ -231,6 +234,18 @@ function ToolBar({setLineColor, setLineWidth, setTool, setGridOn, newWidth, newH
                 <Modal.Footer>
                     <Button onClick={hideAnimationModal} variant='dark'>Close</Button>
                     <Button onClick={animationPreview} variant='dark'>Play</Button>
+                </Modal.Footer>
+            </Modal>
+
+            <Modal show={helpModalShow} onHide={hideHelpModal} backdrop="static" centered>
+                <Modal.Header>
+                    <Modal.Title>Help video</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                <iframe title='helpVid' allow="fullscreen" width="100%" height="210px" src="https://www.youtube.com/embed/NKPKTh-ixiE"></iframe>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={hideHelpModal} variant='dark'>Close</Button>
                 </Modal.Footer>
             </Modal>
         </div>
